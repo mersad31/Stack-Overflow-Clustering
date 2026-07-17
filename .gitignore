@@ -1,0 +1,141 @@
+# =============================================================================
+# .gitignore — Python data-science project
+# =============================================================================
+# Reference: github/github/gitignore/Python.gitignore (extended for this repo)
+
+# ---- Byte-compiled / optimized / DLL files ----
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# ---- Distribution / packaging ----
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# ---- Virtual environments ----
+venv/
+.venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# ---- IDE / editor ----
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.pydevproject
+.settings/
+*.sublime-project
+*.sublime-workspace
+
+# ---- OS junk ----
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+__MACOSX/
+
+# ---- Testing / coverage ----
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+cover/
+
+# ---- Type checkers / linters ----
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pyre/
+.pytype/
+.ruff_cache/
+
+# ---- Jupyter Notebook ----
+.ipynb_checkpoints
+*/.ipynb_checkpoints/
+# Keep executed notebooks (they are deliverables), but ignore checkpoints
+
+# ---- IPython ----
+profile_default/
+ipython_config.py
+
+# ---- PyPI ----
+.PIP
+pip-log.txt
+pip-delete-this-directory.txt
+
+# ---- Environments / secrets ----
+.env
+.env.local
+.env.*.local
+*.env
+*.pem
+*.key
+.streamlit/secrets.toml
+
+# ---- Logs ----
+*.log
+logs/
+
+# =============================================================================
+# Project-specific: heavy / regeneratable artifacts
+# =============================================================================
+# Raw survey data (~hundreds of MB) — download separately, do NOT commit
+data/raw/**
+!data/raw/.gitkeep
+
+# Interim intermediate parquet/CSV — reproducible from raw + code
+data/interim/**
+!data/interim/.gitkeep
+
+# Processed matrices / embeddings / labels — reproducible
+# (uncomment the next two lines if these get large in your workflow)
+# data/processed/**
+# !data/processed/.gitkeep
+
+# Trained models — large and reproducible
+artifacts/models/**
+!artifacts/models/.gitkeep
+
+# Generated reports — reproducible from notebooks + scripts
+# (uncomment if you don't want DOCX/PDF in git)
+# reports/*.docx
+
+# Streamlit secrets
+.streamlit/secrets.toml
+
+# Local scratch / notes
+.scratch/
+NOTES.local.md
+Archive.zip
