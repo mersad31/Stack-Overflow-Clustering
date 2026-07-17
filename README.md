@@ -2,9 +2,6 @@
 
 پروژه پایانی درس داده‌کاوی پیشرفته با استفاده از داده‌های پیمایش توسعه‌دهندگان Stack Overflow در سال ۲۰۲۴.
 
-مرصاد احمدی — 40301274  
-علی حسن زاده — 40304464
-
 ## خلاصه پروژه
 
 پس از پاک‌سازی 65,437 پاسخ خام، مجموعه تحلیلی شامل 60,023 پاسخ و 328 ویژگی ساخته شد. پنج خانواده الگوریتم خوشه‌بندی در 78 پیکربندی مقایسه شدند. نتیجه نهایی از consensus clustering با دو خوشه به دست آمد:
@@ -30,10 +27,10 @@
 - `tests/`: آزمون‌های خودکار
 
 ## اجرا
+### قبل از اجرا هر دو فایل csv داخل ددیتاست را در root قرار دهید.
 
 فرمان‌ها از ریشه پروژه اجرا می‌شوند:
 
-```put the csv files of dataset in the root```
 ```powershell
 python -m venv venv
 .\venv\Scripts\python.exe -m pip install -r requirements.txt
@@ -52,8 +49,8 @@ powershell -ExecutionPolicy Bypass -File scripts\export_reports_pdf.ps1
 
 ## گزارش‌ها
 
-- `Final_Report_FA.docx` / `Final_Report_FA.pdf`: گزارش جامع نهایی
-- `Phase1_Report_FA.docx` / `Phase1_Report_FA.pdf`: آماده‌سازی داده و گرایش خوشه‌ای
-- `Phase2_Report_FA.docx` / `Phase2_Report_FA.pdf`: مقایسه الگوریتم‌ها
-- `Phase3_Report_FA.docx` / `Phase3_Report_FA.pdf`: consensus، تفسیر و تحلیل تکمیلی
-- `Topic_Report_FA.docx` / `Topic_Report_FA.pdf`: انتخاب موضوع، داده و برنامه تحلیل
+- report/ `Final_Report_FA.pdf`: گزارش جامع نهایی
+- report/ `Phase1_Report_FA.pdf`: آماده‌سازی داده و گرایش خوشه‌ای
+- report/ `Phase2_Report_FA.pdf`: مقایسه الگوریتم‌ها
+- report/ `Phase3_Report_FA.pdf`: consensus، تفسیر و تحلیل تکمیلی
+- report/ `Topic_Report_FA.pdf`: انتخاب موضوع، داده و برنامه تحلیل
