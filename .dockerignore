@@ -1,0 +1,117 @@
+# =============================================================================
+# .dockerignore — keeps build context small and image reproducible
+# =============================================================================
+# Anything matched here is NOT sent to the Docker builder, which:
+#   - speeds up `docker build`
+#   - prevents host secrets / caches from leaking into the image
+#   - avoids cache-busting layers when irrelevant files change
+
+# ---- Python bytecode & build artifacts ----
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+*.egg
+.eggs/
+build/
+dist/
+wheels/
+sdist/
+
+# ---- Test / type-checker caches ----
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.tox/
+.nox/
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+*.cover
+.hypothesis/
+
+# ---- Jupyter ----
+.ipynb_checkpoints/
+*/.ipynb_checkpoints/
+
+# ---- Virtual environments (will be recreated in image) ----
+venv/
+.venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# ---- IDE / editor ----
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.pydevproject
+.settings/
+
+# ---- OS junk ----
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+__MACOSX/
+
+# ---- Git ----
+.git/
+.gitignore
+.gitattributes
+.github/
+
+# ---- Docker meta (don't ship inside image) ----
+Dockerfile
+.dockerignore
+docker-compose.yml
+docker-compose.*.yml
+.docker/
+
+# ---- CI / docs (not needed at runtime) ----
+.github/
+.gitlab-ci.yml
+.circleci/
+docs/
+
+# ---- Heavy data — mount as volumes instead ----
+# Keep dir structure with .gitkeep, but skip the bulky files
+data/raw/**
+data/interim/**
+data/processed/**
+!data/**/.gitkeep
+
+# Heavy model artifacts — mount as volume
+artifacts/models/**
+!artifacts/**/.gitkeep
+
+# Generated reports (PDFs/DOCXs are large and reproducible)
+reports/*.pdf
+reports/*.docx
+
+# ---- Logs ----
+*.log
+logs/
+pip-log.txt
+
+# ---- Env / secrets ----
+.env
+.env.*
+*.pem
+*.key
+.streamlit/secrets.toml
+
+# ---- Local notes ----
+NOTES.md
+TODO.md
+*.tmp

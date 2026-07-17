@@ -1,0 +1,131 @@
+# =============================================================================
+# docker-compose.yml — Stack Overflow 2024 Clustering project
+# =============================================================================
+# Services:
+#   dashboard  (default)  — Streamlit UI on http://localhost:8501
+#   phase2     (profile)  — Run partitioning + model-family comparison
+#   phase3     (profile)  — Run consensus clustering + bonus analyses
+#   build      (profile)  — Rebuild all notebooks, figures, DOCX reports
+#   validate   (profile)  — Run release validation
+#   pytest     (profile)  — Run the test suite
+#
+# Usage:
+#   docker compose up -d                 # dashboard
+#   docker compose --profile analysis up --abort-on-container-exit phase2
+#   docker compose --profile analysis run --rm validate
+#   docker compose --profile analysis run --rm pytest
+# =============================================================================
+
+services:
+  # ---------------------------------------------------------------------------
+  # Default service: Streamlit dashboard (always on)
+  # ---------------------------------------------------------------------------
+  dashboard:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: so-clustering:latest
+    container_name: so-dashboard
+    ports:
+      - "8501:8501"
+    volumes:
+      # Mount heavy / generated dirs as volumes so the image stays small and
+      # host-side edits are visible inside the container.
+      - ./data:/app/data
+      - ./artifacts:/app/artifacts
+      - ./reports:/app/reports
+      # Source code (live reload while developing)
+      - ./src:/app/src
+      - ./scripts:/app/scripts
+      - ./dashboard:/app/dashboard
+      - ./notebooks:/app/notebooks
+      - ./tests:/app/tests
+      - ./config.yaml:/app/config.yaml:ro
+    environment:
+      - PYTHONPATH=/app:/app/src
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:8501/_stcore/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+
+  # ---------------------------------------------------------------------------
+  # Analysis services (one-shot, use `run --rm`)
+  # ---------------------------------------------------------------------------
+  phase2:
+    image: so-clustering:latest
+    container_name: so-phase2
+    profiles: ["analysis"]
+    volumes:
+      - ./data:/app/data
+      - ./artifacts:/app/artifacts
+      - ./reports:/app/reports
+      - ./src:/app/src
+      - ./scripts:/app/scripts
+      - ./config.yaml:/app/config.yaml:ro
+    environment:
+      - PYTHONPATH=/app:/app/src
+    command: ["python", "-m", "scripts.run_phase2", "--config", "config.yaml"]
+
+  phase3:
+    image: so-clustering:latest
+    container_name: so-phase3
+    profiles: ["analysis"]
+    volumes:
+      - ./data:/app/data
+      - ./artifacts:/app/artifacts
+      - ./reports:/app/reports
+      - ./src:/app/src
+      - ./scripts:/app/scripts
+      - ./config.yaml:/app/config.yaml:ro
+    environment:
+      - PYTHONPATH=/app:/app/src
+    command: ["python", "-m", "scripts.run_phase3", "--config", "config.yaml"]
+
+  build-deliverables:
+    image: so-clustering:latest
+    container_name: so-build
+    profiles: ["analysis"]
+    volumes:
+      - ./data:/app/data
+      - ./artifacts:/app/artifacts
+      - ./reports:/app/reports
+      - ./src:/app/src
+      - ./scripts:/app/scripts
+      - ./notebooks:/app/notebooks
+      - ./config.yaml:/app/config.yaml:ro
+    environment:
+      - PYTHONPATH=/app:/app/src
+    command: ["python", "-m", "scripts.build_all_deliverables"]
+
+  validate:
+    image: so-clustering:latest
+    container_name: so-validate
+    profiles: ["analysis"]
+    volumes:
+      - ./data:/app/data
+      - ./artifacts:/app/artifacts
+      - ./reports:/app/reports
+      - ./src:/app/src
+      - ./scripts:/app/scripts
+      - ./notebooks:/app/notebooks
+      - ./config.yaml:/app/config.yaml:ro
+    environment:
+      - PYTHONPATH=/app:/app/src
+    command: ["python", "-m", "scripts.validate_release"]
+
+  pytest:
+    image: so-clustering:latest
+    container_name: so-pytest
+    profiles: ["analysis"]
+    volumes:
+      - ./src:/app/src
+      - ./tests:/app/tests
+      - ./data:/app/data:ro
+      - ./artifacts:/app/artifacts:ro
+      - ./reports:/app/reports:ro
+    environment:
+      - PYTHONPATH=/app:/app/src
+    command: ["python", "-m", "pytest", "-v"]
